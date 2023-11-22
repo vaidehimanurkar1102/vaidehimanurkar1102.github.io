@@ -5,7 +5,7 @@ from keras.preprocessing.image import load_img, img_to_array
 from keras.models import load_model
 
 # Load the model
-model = load_model("./model/v3_pred_cott_dis.h5")
+model = load_model("./model/v3_pred_cotton_dis.h5")
 st.write('@@ Model loaded')
 
 def pred_cot_dieas(cott_plant):

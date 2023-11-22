@@ -8,6 +8,7 @@ from keras.models import load_model
 model = load_model("./model/v3_pred_cott_dis.h5")
 st.write('@@ Model loaded')
 
+@st.cache(allow_output_mutation=True)
 def pred_cot_dieas(cott_plant):
     st.write("@@ Got Image for prediction")
     test_image = load_img(cott_plant, target_size=(150, 150))

@@ -1,74 +1,41 @@
-#Import necessary libraries
-from flask import Flask, render_template, request
-
+import streamlit as st
 import numpy as np
 import os
-
-from keras.preprocessing.image import load_img
-from keras.preprocessing.image import img_to_array
+from keras.preprocessing.image import load_img, img_to_array
 from keras.models import load_model
 
-#load model
-model =load_model("/Ai dataset/v3_red_cott_disease.h5")
-
-print('@@ Model loaded')
-
+# Load the model
+model = load_model("model\\v3_pred_cott_dis.h5")
+st.write('@@ Model loaded')
 
 def pred_cot_dieas(cott_plant):
-  test_image = load_img(cott_plant, target_size = (150, 150)) # load image 
-  print("@@ Got Image for prediction")
-  
-  test_image = img_to_array(test_image)/255 # convert image to np array and normalize
-  test_image = np.expand_dims(test_image, axis = 0) # change dimention 3D to 4D
-  
-  result = model.predict(test_image).round(3) # predict diseased palnt or not
-  print('@@ Raw result = ', result)
-  
-  pred = np.argmax(result) # get the index of max value
-  
-  if pred == 0:
-      return "Aphids_disease",'Aphids_disease.html'
-  if pred == 1:
-    return "Army_worm ", 'Army_worm.html' # if index 0 burned leaf
-  elif pred == 2:
-      return "Bacterial_Blight ", 'Bacterial_Blight.html' # # if index 1
-  elif pred == 3:
-      return " Healthy Cotton Plant", 'healthy_plant.html'  # if index 2  fresh leaf
-  elif pred == 4:
-      return "Powdery Mildew", 'Powdery_Mildew.html'
-  else:
-    return "Target spot", 'Target_spot.html' # if index 3
+    st.write("@@ Got Image for prediction")
+    test_image = load_img(cott_plant, target_size=(150, 150))
+    test_image = img_to_array(test_image) / 255
+    test_image = np.expand_dims(test_image, axis=0)
+    result = model.predict(test_image).round(3)
+    st.write('@@ Raw result = ', result)
+    pred = np.argmax(result)
 
-#------------>>pred_cot_dieas<<--end
-    
+    class_labels = ["Aphids_disease", "Army_worm", "Bacterial_Blight", "Healthy Cotton Plant", "Powdery Mildew", "Target spot"]
+    return class_labels[pred]
 
-# Create flask instance
-app = Flask(__name__)
-
-# render index.html page
-@app.route("/", methods=['GET', 'POST'])
+# Render the main page
 def home():
-        return render_template('index.html')
+    st.title("Plant Disease Prediction")
+    st.write("Upload an image of a cotton plant to predict the disease.")
+    uploaded_file = st.file_uploader("Choose an image...", type="jpg")
     
- 
-# get input image from client then predict class and render respective .html page for solution
-@app.route("/predict", methods = ['GET','POST'])
-def predict():
-     if request.method == 'POST':
-        file = request.files['image'] # fet input
-        filename = file.filename        
-        print("@@ Input posted = ", filename)
-        
-        file_path = os.path.join('static/user uploaded', filename)
-        file.save(file_path)
+    if uploaded_file is not None:
+        st.image(uploaded_file, caption="Uploaded Image.", use_column_width=True)
+        st.write("")
+        st.write("Classifying...")
 
-        print("@@ Predicting class......")
-        pred, output_page = pred_cot_dieas(cott_plant=file_path)
-              
-        return render_template(output_page, pred_output = pred, user_image = file_path)
-    
-# For local system & cloud
-if __name__ == "__main__":
-    app.run(threaded=False,) 
-    
-    
+        # Perform prediction and display the result
+        pred = pred_cot_dieas(cott_plant=uploaded_file)
+        st.success(f"The plant is classified as: {pred}")
+        st.balloons()
+
+# Run the app
+if __name__ == '__main__':
+    home()

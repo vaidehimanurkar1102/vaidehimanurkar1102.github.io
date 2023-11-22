@@ -3,9 +3,7 @@ import numpy as np
 import os
 from keras.preprocessing.image import load_img, img_to_array
 from keras.models import load_model
-#MainMenu {
-  visibility: hidden;
-}
+
 # Load the model
 model = load_model("./model/v3_red_cott_disease.h5")
 
@@ -48,4 +46,15 @@ def home():
 # Run the app
 if __name__ == '__main__':
     home()
-
+st.markdown(
+    """
+    <style>
+    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
+    .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137,
+    .viewerBadge_text__1JaDK {
+        display: none;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)

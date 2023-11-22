@@ -9,12 +9,10 @@ model = load_model("./model/v3_red_cott_disease.h5")
 st.write('@@ Model loaded')
 
 def pred_cot_dieas(cott_plant):
-    st.write("@@ Got Image for prediction")
     test_image = load_img(cott_plant, target_size=(150, 150))
     test_image = img_to_array(test_image) / 255
     test_image = np.expand_dims(test_image, axis=0)
     result = model.predict(test_image).round(3)
-    st.write('@@ Raw result = ', result)
     pred = np.argmax(result)
 
     if pred == 0:

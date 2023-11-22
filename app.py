@@ -6,7 +6,6 @@ from keras.models import load_model
 
 # Load the model
 model = load_model("./model/v3_red_cott_disease.h5")
-st.write('@@ Model loaded')
 
 def pred_cot_dieas(cott_plant):
     test_image = load_img(cott_plant, target_size=(150, 150))

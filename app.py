@@ -17,8 +17,18 @@ def pred_cot_dieas(cott_plant):
     st.write('@@ Raw result = ', result)
     pred = np.argmax(result)
 
-    class_labels = ["Aphids_disease", "Army_worm", "Bacterial_Blight", "Healthy Cotton Plant", "Powdery Mildew", "Target spot"]
-    return class_labels[pred]
+    if pred == 0:
+        return "Aphids_disease", 'Aphids_disease.html'
+    elif pred == 1:
+        return "Army_worm", 'Army_worm.html'
+    elif pred == 2:
+        return "Bacterial_Blight", 'Bacterial_Blight.html'
+    elif pred == 3:
+        return "Healthy Cotton Plant", 'healthy_plant.html'
+    elif pred == 4:
+        return "Powdery Mildew", 'Powdery_Mildew.html'
+    else:
+        return "Target spot", 'Target_spot.html'
 
 # Render the main page
 def home():
@@ -32,10 +42,11 @@ def home():
         st.write("Classifying...")
 
         # Perform prediction and display the result
-        pred = pred_cot_dieas(cott_plant=uploaded_file)
+        pred, output_page = pred_cot_dieas(cott_plant=uploaded_file)
         st.success(f"The plant is classified as: {pred}")
         st.balloons()
 
 # Run the app
 if __name__ == '__main__':
     home()
+

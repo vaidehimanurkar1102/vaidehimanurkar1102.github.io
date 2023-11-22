@@ -3,7 +3,9 @@ import numpy as np
 import os
 from keras.preprocessing.image import load_img, img_to_array
 from keras.models import load_model
-
+#MainMenu {
+  visibility: hidden;
+}
 # Load the model
 model = load_model("./model/v3_red_cott_disease.h5")
 
